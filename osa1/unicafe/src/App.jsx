@@ -6,8 +6,8 @@ const Button = ({handleClick, text}) => (
   </button>
 )
 
-const Statistics = ({feedback, total}) => {
-  if (total === 0) {
+const Statistics = ({stats}) => {
+  if (stats.total === 0) {
     return (
       <div>
         No feedback given
@@ -15,45 +15,40 @@ const Statistics = ({feedback, total}) => {
     )
   }
 
-  const average = ((1*feedback.goodCount)+(0*feedback.neutralCount)+(-1*feedback.badCount))/total
-  const positivePercentage = (feedback.goodCount/total)*100
+  const average = ((1*stats.goodCount)+(0*stats.neutralCount)+(-1*stats.badCount))/stats.total
+  const positivePercentage = (stats.goodCount/stats.total)*100
   return (
     <>
-      <div>good {feedback.goodCount}</div>
-      <div>neutral {feedback.neutralCount}</div>
-      <div>bad {feedback.badCount}</div>
-      <div>all {total}</div>
-      <div>average {average}</div>
-      <div>positive {positivePercentage} %</div>
+      <StatisticLine text="good" value={stats.goodCount} />
+      <StatisticLine text="neutral" value={stats.neutralCount} />
+      <StatisticLine text="bad" value={stats.badCount} />
+      <StatisticLine text="all" value={stats.total} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive%" value={positivePercentage} />
     </>
   )
 }
+
+const StatisticLine = (props) => (
+  <div>
+    {props.text} {props.value}
+  </div>
+)
 
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const [total, setTotal] = useState(0)
 
-  const incrementGood = () => {
-    setGood(good + 1)
-    setTotal(total + 1)
-  }
-
-  const incrementNeutral = () => {
-    setNeutral(neutral + 1)
-    setTotal(total + 1)
-  }
-
-  const incrementBad = () => {
-    setBad(bad + 1)
-    setTotal(total + 1)
-  }
+  const incrementGood = () => setGood(good + 1)
+  const incrementNeutral = () => setNeutral(neutral + 1)
+  const incrementBad = () => setBad(bad + 1)
 
   const feedback = {
     goodCount: good,
     neutralCount: neutral,
-    badCount: bad
+    badCount: bad,
+    total: good + neutral + bad
   }
 
   return (
@@ -63,7 +58,7 @@ const App = () => {
       <Button handleClick={incrementNeutral} text="neutral" />
       <Button handleClick={incrementBad} text="bad" />
       <h1>statistics</h1>
-      <Statistics feedback={feedback} total={total}/>
+      <Statistics stats={feedback}/>
     </div>
   )
 }
