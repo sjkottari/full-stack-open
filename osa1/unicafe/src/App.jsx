@@ -7,10 +7,16 @@ const Button = ({handleClick, text}) => (
 )
 
 const Statistics = ({feedback, total}) => {
+  if (total === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
 
   const average = ((1*feedback.goodCount)+(0*feedback.neutralCount)+(-1*feedback.badCount))/total
   const positivePercentage = (feedback.goodCount/total)*100
-
   return (
     <>
       <div>good {feedback.goodCount}</div>
