@@ -16,23 +16,25 @@ const Statistics = ({stats}) => {
   }
 
   const average = ((1*stats.goodCount)+(0*stats.neutralCount)+(-1*stats.badCount))/stats.total
-  const positivePercentage = (stats.goodCount/stats.total)*100
+  const positive = ((stats.goodCount/stats.total)*100).toString().concat(" %")
   return (
-    <>
-      <StatisticLine text="good" value={stats.goodCount} />
-      <StatisticLine text="neutral" value={stats.neutralCount} />
-      <StatisticLine text="bad" value={stats.badCount} />
-      <StatisticLine text="all" value={stats.total} />
-      <StatisticLine text="average" value={average} />
-      <StatisticLine text="positive%" value={positivePercentage} />
-    </>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={stats.goodCount} />
+        <StatisticLine text="neutral" value={stats.neutralCount} />
+        <StatisticLine text="bad" value={stats.badCount} />
+        <StatisticLine text="all" value={stats.total} />
+        <StatisticLine text="average" value={average} />
+        <StatisticLine text="positive" value={positive} />
+      </tbody>
+    </table>
   )
 }
 
 const StatisticLine = (props) => (
-  <div>
-    {props.text} {props.value}
-  </div>
+  <tr>
+    <td>{props.text}</td><td>{props.value}</td>
+  </tr>
 )
 
 const App = () => {
