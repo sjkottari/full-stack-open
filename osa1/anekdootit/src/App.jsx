@@ -1,11 +1,9 @@
 import { useState } from 'react'
 
 const Button = ({handleClick, text}) => (
-  <div>
     <button onClick={handleClick}>
       {text}
     </button>
-  </div>
 )
 
 const App = () => {
@@ -19,22 +17,29 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
-  const [selected, setSelected] = useState(0)
 
-  const randomizer = () => {
-    console.log("Previously selected", selected)
+  const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
+
+  const randomizeNext = () => {
     // Inspired by https://stackoverflow.com/a/7228322
     const random = Math.floor(Math.random() * ((anecdotes.length - 1) + 1))
     setSelected(random)
-    console.log("Newly selected", random)
+  }
+
+  const handleVote = () => {
+    const pointsCopy = [...points]
+    pointsCopy[selected] = points[selected] + 1
+    setPoints(pointsCopy)
   }
 
   return (
-    <div>
-      {anecdotes[selected]}
-      <Button handleClick={randomizer} text={"Next anecdote"} />
-    </div>
+    <>
+      <div>{anecdotes[selected]}</div>
+      <div>has {points[selected]} votes</div>
+      <Button handleClick={handleVote} text={"Vote"} />
+      <Button handleClick={randomizeNext} text={"Next anecdote"} />
+    </>
   )
 }
 
