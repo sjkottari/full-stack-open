@@ -1,9 +1,16 @@
 import { useState } from 'react'
 
 const Button = ({handleClick, text}) => (
-    <button onClick={handleClick}>
-      {text}
-    </button>
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+
+const Display = ({anecdote, votes}) => (
+  <>
+    <div>{anecdote}</div>
+    <div>has {votes} votes</div>
+  </>
 )
 
 const App = () => {
@@ -20,6 +27,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
+  const [largest, setLargest] = useState(0)
 
   const randomizeNext = () => {
     // Inspired by https://stackoverflow.com/a/7228322
@@ -30,15 +38,20 @@ const App = () => {
   const handleVote = () => {
     const pointsCopy = [...points]
     pointsCopy[selected] = points[selected] + 1
+    if (pointsCopy[selected] > points[largest]) {
+      setLargest(selected)
+    }
     setPoints(pointsCopy)
   }
 
   return (
     <>
-      <div>{anecdotes[selected]}</div>
-      <div>has {points[selected]} votes</div>
+      <h2>Anecdote of the day</h2>
+      <Display anecdote={anecdotes[selected]} votes={points[selected]} />
       <Button handleClick={handleVote} text={"Vote"} />
       <Button handleClick={randomizeNext} text={"Next anecdote"} />
+      <h2>Anecdote with most votes</h2>
+      <Display anecdote={anecdotes[largest]} votes={points[largest]} />
     </>
   )
 }
