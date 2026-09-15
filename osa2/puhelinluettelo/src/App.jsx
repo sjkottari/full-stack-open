@@ -68,13 +68,31 @@ const App = () => {
     }
 
     if (checkPerson(persons, newName)) {
-      window.alert(`${newName} is already added to phonebook`)
+      if (newNumber.trim() !== '') {
+        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          const existingPerson = persons.find(n => n.name === newName)
+          console.log(existingPerson)
+          const changedPerson = { ...existingPerson, number: newNumber.trim() }
+          console.log(changedPerson)
+
+          personService
+            .update(existingPerson.id, changedPerson)
+            .then(returnedData => {
+              console.log(returnedData)
+              setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedData))
+            })
+          return
+        }
+        console.log("User not updated")
+        return
+      }
+      window.alert(`${newName} is already added to phonebook, but there's no new number!`)
       return
     }
 
     const personObject = {
-      name: newName,
-      number: newNumber
+      name: newName.trim(),
+      number: newNumber.trim()
     }
 
     personService
