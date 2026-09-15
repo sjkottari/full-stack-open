@@ -11,7 +11,7 @@ const Filter = ({query, handler}) => {
 
 const PersonForm = (props) => {
   return (
-    <form onSubmit={props.function}>
+    <form onSubmit={props.addPerson}>
       <div>
         name: <input value={props.name} onChange={props.namehandler} />
       </div>
@@ -25,11 +25,22 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, deletePerson}) => {
+  const handleDeletion = person => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      deletePerson(person.id)
+    }
+  }
+
   return (
     <>
       {persons.map(person => (
-          <p key={person.name}>{person.name} {person.number}</p>
+          <p key={person.name}>
+            {person.name} {person.number}
+            <button type='button' onClick={() => handleDeletion(person)}>
+              delete
+            </button>
+          </p>
         ))}
     </>
   )
@@ -75,6 +86,14 @@ const App = () => {
       })
   }
 
+  const deletePerson = id => {
+    personService
+      .purge(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
+
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -98,7 +117,7 @@ const App = () => {
 
       <h3>add a new</h3>
       <PersonForm
-        function={addPerson}
+        addPerson={addPerson}
         name={newName}
         namehandler={handleNameChange}
         number={newNumber}
@@ -106,7 +125,10 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons}/>
+      <Persons
+        persons={filteredPersons}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 
