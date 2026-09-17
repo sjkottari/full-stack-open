@@ -63,36 +63,41 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    function checkPerson(array, value) {
-      return array.some((arrayValue) => arrayValue.name === value)
-    }
+    const name = newName.trim()
+    const number = newNumber.trim()
 
-    if (checkPerson(persons, newName)) {
-      if (newNumber.trim() !== '') {
-        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-          const existingPerson = persons.find(n => n.name === newName)
-          console.log(existingPerson)
-          const changedPerson = { ...existingPerson, number: newNumber.trim() }
-          console.log(changedPerson)
+    const existingPerson = persons.find(n => n.name === name)
 
-          personService
-            .update(existingPerson.id, changedPerson)
-            .then(returnedData => {
-              console.log(returnedData)
-              setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedData))
-            })
-          return
-        }
-        console.log("User not updated")
+    if (existingPerson) {
+      if (number === '') {
+        window.alert(`${name} is already added to phonebook, but there's no new number!`)
         return
       }
-      window.alert(`${newName} is already added to phonebook, but there's no new number!`)
+
+      const confirmed = window.confirm(
+        `${name} is already added to phonebook, replace the old number with a new one?`
+      )
+
+      if (confirmed) {
+        const changedPerson = { ...existingPerson, number: number }
+        personService
+          .update(existingPerson.id, changedPerson)
+          .then(returnedData => {
+            setPersons(persons.map(person =>
+              person.id !== existingPerson.id ? person : returnedData
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+        return
+      }
+      console.log("User not updated")
       return
     }
 
     const personObject = {
-      name: newName.trim(),
-      number: newNumber.trim()
+      name,
+      number
     }
 
     personService
