@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const Filter = ({query, handler}) => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotifMsg] = useState(null)
 
   useEffect(() => {
     personService
@@ -86,6 +88,12 @@ const App = () => {
             setPersons(persons.map(person =>
               person.id !== existingPerson.id ? person : returnedData
             ))
+            setNotifMsg(
+              `Modified ${returnedData.name}`
+            )
+            setTimeout(() => {
+              setNotifMsg(null)
+            }, 5000)
             setNewName('')
             setNewNumber('')
           })
@@ -102,8 +110,14 @@ const App = () => {
 
     personService
       .create(personObject)
-        .then(returnedData => {
+      .then(returnedData => {
         setPersons(persons.concat(returnedData))
+        setNotifMsg(
+          `Added ${returnedData.name}`
+        )
+        setTimeout(() => {
+          setNotifMsg(null)
+        }, 5000)
         setNewName('')
         setNewNumber('')
       })
@@ -113,7 +127,14 @@ const App = () => {
     personService
       .purge(id)
       .then(() => {
+        const deletedPerson = persons.find(person => person.id === id)
         setPersons(persons.filter(person => person.id !== id))
+        setNotifMsg(
+          `Deleted ${deletedPerson.name}`
+        )
+        setTimeout(() => {
+          setNotifMsg(null)
+        }, 5000)
       })
   }
 
@@ -136,6 +157,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter query={filter} handler={handleFilterChange} />
 
       <h3>add a new</h3>
