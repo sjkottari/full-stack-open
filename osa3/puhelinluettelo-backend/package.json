@@ -1,0 +1,24 @@
+{
+  "name": "phonebook-backend",
+  "version": "0.0.1",
+  "description": "Backend for phonebook app",
+  "homepage": "https://github.com/sjkottari/full-stack-open#readme",
+  "bugs": {
+    "url": "https://github.com/sjkottari/full-stack-open/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjkottari/full-stack-open.git"
+  },
+  "license": "MIT",
+  "author": "Santeri Kottari",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
