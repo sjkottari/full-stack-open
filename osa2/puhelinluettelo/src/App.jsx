@@ -100,7 +100,7 @@ const App = () => {
           })
           .catch(error => {
             setNotification({
-              message: `Information of ${existingPerson.name} has already been removed from server`,
+              message: `Update request failed: Person has been removed or operation unsupported by server`,
               type: 'error'
             })
             setTimeout(() => {
