@@ -1,0 +1,1 @@
+GET https://full-stack-open-phonebook-rrpu.onrender.com/api/persons
