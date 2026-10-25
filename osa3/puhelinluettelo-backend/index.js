@@ -1,10 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(express.static('dist'))
 app.use(morgan(function (tokens, req, res) {
   return [
     tokens.method(req, res),
@@ -49,10 +48,6 @@ const randomizeId = (min, max) => {
     )
   )
 }
-
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
-})
 
 app.get('/info', (request, response) => {
   const date = new Date()
